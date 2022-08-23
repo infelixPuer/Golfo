@@ -70,7 +70,6 @@ public class Ball : MonoBehaviour
 
                 _cam.transform.RotateAround(transform.position, Vector3.down, direction.x * 180f);
                 _cam.transform.RotateAround(transform.position, Vector3.right, direction.y * 180f);
-                //_cam.transform.LookAt(transform.position, Vector3.up);
 
                 initialPos = _cam.ScreenToViewportPoint(Mouse.current.position.ReadValue());
                 yield return new WaitForFixedUpdate();

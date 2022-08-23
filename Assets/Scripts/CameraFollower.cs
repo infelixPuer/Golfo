@@ -20,10 +20,6 @@ public class CameraFollower : MonoBehaviour
         
     }
 
-    private void LateUpdate() {
-        
-    }
-
     private void Update() 
     {
         transform.LookAt(_target.position, Vector3.up);
@@ -31,20 +27,6 @@ public class CameraFollower : MonoBehaviour
         if (_ball.GetRotationOption()) { return; }
 
         FollowOnDistance();
-
-
-        // if (!_writeOnce) {
-        //     var heading = transform.position - _target.position;
-        //     var pos = _target.position + heading;
-        //     // var direction = (heading / _distance).normalized;
-        //     // Debug.Log(direction);
-        //     Debug.Log(heading);
-        //     Debug.Log(pos);
-        //     _writeOnce = true;
-        // }
-
-
-        // transform.position = (transform.position - _target.position).normalized * _distance + _target.position;
     }
 
     private void FollowOnDistance() {

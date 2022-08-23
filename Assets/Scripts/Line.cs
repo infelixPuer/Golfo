@@ -29,32 +29,21 @@ public class Line : MonoBehaviour
     }
 
     private void MousePressed(InputAction.CallbackContext contex) {
-        Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        RaycastHit hit;
-        
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("RayDetector"))) {
-            Vector3 initialPos = hit.point;
-            initialPos.y = _ballTransform.position.y;
-            StartCoroutine(Draw(initialPos));
-        }
+        Vector3 mousePosInitial = _mainCamera.ScreenToViewportPoint(Mouse.current.position.ReadValue());
+        StartCoroutine(Draw(mousePosInitial));
     }
 
     private IEnumerator Draw(Vector3 initialPosition) {
         while (_mouseLeftClick.ReadValue<float>() != 0) {
             _ball.SetAiming(true);
-            Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            RaycastHit hit;
-            Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("RayDetector"));
-            Vector3 endPos = hit.point;
-            endPos.y = _ballTransform.position.y;
-            Vector3 heading = endPos - _ballTransform.position;
-            _lineLenght = Mathf.Clamp((Mathf.Abs(endPos.z - initialPosition.z)) / 2, 0f, .2f);
-            float lenght = -(endPos.z - initialPosition.z) / 2;
-            Vector3 linePosition = new Vector3(_ballTransform.position.x, _ballTransform.position.y + (_ballTransform.localScale.y / 20) , _ballTransform.position.z);
-            Vector3 lineEnd = new Vector3(_ballTransform.position.x, linePosition.y + _lineLenght, _ballTransform.position.z);
+            Vector3 mousePos = _mainCamera.ScreenToViewportPoint(Mouse.current.position.ReadValue());
+            Vector3 heading = mousePos - _ballTransform.position;
+            _lineLenght = Mathf.Clamp((Mathf.Abs(mousePos.y - initialPosition.y)) / 2, 0f, .2f);
+            Vector3 linePos = new Vector3(_ballTransform.position.x, _ballTransform.position.y + (_ballTransform.localScale.y / 20), _ballTransform.position.z);
+            Vector3 lineEnd = new Vector3(_ballTransform.position.x, linePos.y + _lineLenght, _ballTransform.position.z);
 
             _lineRenderer.gameObject.SetActive(true);
-            _lineRenderer.SetPosition(0, linePosition);
+            _lineRenderer.SetPosition(0, linePos);
             _lineRenderer.SetPosition(1, lineEnd);
             yield return new WaitForFixedUpdate();
         }
